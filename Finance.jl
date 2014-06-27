@@ -48,16 +48,18 @@ end
 
 #Implements Internal Rate of Return calculation as per Excel
 function IRR(Cash_Flow,Guess=0.1)
+	const limit=0.0000001
 	initial=Cash_Flow[1]
 	values=Cash_Flow[2:length(Cash_Flow)]
 	
-	rate=Guess
-	oldRate=Guess+0.01
+	rate=Guess*1.01
+	oldRate=Guess
 	
-	while (abs((rate-oldRate)/rate) > 0.0000001)
+	while (abs((rate-oldRate)/rate) > limit)
 		newRate=rate-NPV(rate,values,initial)*((rate-oldRate)/(NPV(rate,values,initial)-NPV(oldRate,values,initial)))
 		oldRate=rate
 		rate=newRate
 	end
+	
 	round(rate,6)
 end
