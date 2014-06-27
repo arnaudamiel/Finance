@@ -30,3 +30,34 @@ function EFFECT(Nominal_rate,Npery)
 	Effect = ((1 + Nominal_rate/Npery)^Npery - 1)
 	round(Effect, 6)
 end
+
+#######################################
+
+#Implements Net Present Value calculation as per Excel
+#Add the option of adding inital payment
+function NPV(Rate,Cash_Flow,InitialPayment=0)
+	npv=0
+	for i in 1:length(Cash_Flow)
+		npv += Cash_Flow[i] / (1+Rate)^i
+	end
+	npv += InitialPayment
+	round(npv, 2)
+end
+
+#######################################
+
+#Implements Internal Rate of Return calculation as per Excel
+function IRR(Cash_Flow,Guess=0.1)
+	initial=Cash_Flow[1]
+	values=Cash_Flow[2:length(Cash_Flow)]
+	
+	rate=Guess
+	oldRate=Guess+0.01
+	
+	while (abs((rate-oldRate)/rate) > 0.0000001)
+		newRate=rate-NPV(rate,values,initial)*((rate-oldRate)/(NPV(rate,values,initial)-NPV(oldRate,values,initial)))
+		oldRate=rate
+		rate=newRate
+	end
+	round(rate,2)
+end
