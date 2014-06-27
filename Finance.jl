@@ -59,5 +59,5 @@ function IRR(Cash_Flow,Guess=0.1)
 		oldRate=rate
 		rate=newRate
 	end
-	round(rate,2)
+	round(rate,6)
 end
